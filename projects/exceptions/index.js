@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* ДЗ 3 - работа с исключениями и отладчиком */
 
 /*
@@ -16,7 +17,22 @@
    isAllTrue([1, 2, 3, 4, 5], n => n < 10) // вернет true
    isAllTrue([100, 2, 3, 4, 5], n => n < 10) // вернет false
  */
-function isAllTrue(array, fn) {}
+function isAllTrue(array, fn) {
+    if (!Array.isArray(array) || array.length === 0) {
+        throw "empty array"
+    }
+    if (typeof fn !== 'function') {
+        throw 'fn is not a function';
+    }
+
+    for (const element of array) {
+        if (fn(element) === false) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 /*
  Задание 2:
@@ -34,7 +50,20 @@ function isAllTrue(array, fn) {}
    isSomeTrue([1, 2, 30, 4, 5], n => n > 20) // вернет true
    isSomeTrue([1, 2, 3, 4, 5], n => n > 20) // вернет false
  */
-function isSomeTrue(array, fn) {}
+function isSomeTrue(array, fn) {
+    if (!Array.isArray(array) || array.length === 0) {
+        throw "empty array"
+    }
+    if (typeof fn !== 'function') {
+        throw 'fn is not a function';
+    }
+    for (const element of array) {
+        if (fn(element) === true) {
+            return true
+        }
+    }
+    return false
+}
 
 /*
  Задание 3:
@@ -47,7 +76,16 @@ function isSomeTrue(array, fn) {}
  3.3: Необходимо выбрасывать исключение в случаях:
    - fn не является функцией (с текстом "fn is not a function")
  */
-function returnBadArguments(fn, ...args) {}
+function returnBadArguments(fn, ...args) {
+    if (typeof fn !== 'function') {
+        throw 'fn is not a function';
+    }
+    let newArray = [];
+    for( let i = 0; i < args.length; i++){
+        newArray = fn(args[i])
+    }
+return newArray;
+}
 
 /*
  Задание 4:
@@ -66,8 +104,52 @@ function returnBadArguments(fn, ...args) {}
    - number не является числом (с текстом "number is not a number")
    - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function calculator(number = 0) {}
+function calculator(number = 0) {
+    if(!Number.isInteger(number)){
+        throw "number is not a number"
+    }
+    const newObj = {
+        sum(number, ...args) {
+            let result = 0
+            for (let i = 0; i < args.length; i++) {
+                result += args[i]
+            }
+            return result + number;
+        },
+
+        dif(number, ...args) {
+            let result = 0
+            for (let i = 0; i < args.length; i++) {
+                result += args[i]
+            }
+            return number - result;
+        },
+
+        div(number, ...args) {
+            for (let arg of args) {
+                if (arg === 0) {
+                    throw "division by 0"
+                }
+            }
+            let result = 0;
+            result = args.reduce(function ( result, arg) {
+                return result / arg
+            }, number)
+            return result
+        },
+
+        mul(number, ...args) {
+
+            let result = 0;
+            result = args.reduce(function ( result, arg) {
+                return result * arg
+            }, number)
+            return result
+        }
+    }
+    return newObj
+}
 
 /* При решении задач, постарайтесь использовать отладчик */
 
-export { isAllTrue, isSomeTrue, returnBadArguments, calculator };
+export {isAllTrue, isSomeTrue, returnBadArguments, calculator};
