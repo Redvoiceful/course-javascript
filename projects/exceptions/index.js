@@ -80,12 +80,18 @@ function returnBadArguments(fn, ...args) {
     if (typeof fn !== 'function') {
         throw 'fn is not a function';
     }
-    let newArray = [];
-    for( let i = 0; i < args.length; i++){
-        newArray = fn(args[i])
+    const newArray = [];
+    for (const arg of args) {
+        try {
+            fn(arg);
+        } catch (err) {
+            newArray.push(arg)
+        }
+
     }
-return newArray;
+    return newArray
 }
+
 
 /*
  Задание 4:
@@ -105,46 +111,32 @@ return newArray;
    - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
 function calculator(number = 0) {
-    if(!Number.isInteger(number)){
+    if (!Number.isInteger(number)) {
         throw "number is not a number"
     }
     const newObj = {
-        sum(number, ...args) {
-            let result = 0
-            for (let i = 0; i < args.length; i++) {
-                result += args[i]
-            }
-            return result + number;
+        sum(...args) {
+
+            return number + args.reduce((accumulator, num) => accumulator + num, 0)
         },
 
-        dif(number, ...args) {
-            let result = 0
-            for (let i = 0; i < args.length; i++) {
-                result += args[i]
-            }
-            return number - result;
+        dif(...args) {
+            return number - args.reduce((accumulator, num) => accumulator + num, 0)
+
         },
 
-        div(number, ...args) {
+        div(...args) {
             for (let arg of args) {
                 if (arg === 0) {
                     throw "division by 0"
                 }
             }
-            let result = 0;
-            result = args.reduce(function ( result, arg) {
-                return result / arg
-            }, number)
-            return result
+             return number / args.reduce((accumulator, num) => accumulator * num, 1)
         },
 
-        mul(number, ...args) {
+        mul(...args) {
+            return number * args.reduce((accumulator, num) => accumulator * num, 1)
 
-            let result = 0;
-            result = args.reduce(function ( result, arg) {
-                return result * arg
-            }, number)
-            return result
         }
     }
     return newObj
