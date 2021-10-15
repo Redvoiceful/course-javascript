@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* ДЗ 4 - работа с DOM */
 
 /*
@@ -10,7 +11,11 @@
  Пример:
    createDivWithText('loftschool') // создаст элемент div, поместит в него 'loftschool' и вернет созданный элемент
  */
-function createDivWithText(text) {}
+function createDivWithText(text) {
+  const element = document.createElement('div');
+  element.textContent = text
+  return element
+}
 
 /*
  Задание 2:
@@ -20,7 +25,9 @@ function createDivWithText(text) {}
  Пример:
    prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
-function prepend(what, where) {}
+function prepend(what, where) {
+  where.prepend(what)
+}
 
 /*
  Задание 3:
@@ -41,34 +48,47 @@ function prepend(what, where) {}
 
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
-function findAllPSiblings(where) {}
+function findAllPSiblings(where) {
+  const array = [];
+  const children = where.children
 
-/*
- Задание 4:
+  for (let i = 0; i < children.length - 1; i++) {
+    if (children[i].nextElementSibling.nodeName === 'P') {
+      array.push(children[i])
+    }
 
- Функция представленная ниже, перебирает все дочерние узлы типа "элемент" внутри узла переданного в параметре where и возвращает массив из текстового содержимого найденных элементов
- Но похоже, что в код функции закралась ошибка и она работает не так, как описано.
-
- Необходимо найти и исправить ошибку в коде так, чтобы функция работала так, как описано выше.
-
- Пример:
-   Представим, что есть разметка:
-   <body>
-      <div>привет</div>
-      <div>loftschool</div>
-   </body>
-
-   findError(document.body) // функция должна вернуть массив с элементами 'привет' и 'loftschool'
- */
-function findError(where) {
-  const result = [];
-
-  for (const child of where.childNodes) {
-    result.push(child.textContent);
   }
 
-  return result;
+  return array;
 }
+
+  /*
+   Задание 4:
+
+   Функция представленная ниже, перебирает все дочерние узлы типа "элемент" внутри узла переданного в параметре where и возвращает массив из текстового содержимого найденных элементов
+   Но похоже, что в код функции закралась ошибка и она работает не так, как описано.
+
+   Необходимо найти и исправить ошибку в коде так, чтобы функция работала так, как описано выше.
+
+   Пример:
+     Представим, что есть разметка:
+     <body>
+        <div>привет</div>
+        <div>loftschool</div>
+     </body>
+
+     findError(document.body) // функция должна вернуть массив с элементами 'привет' и 'loftschool'
+   */
+  function findError(where) {
+    const result = [];
+
+    for (let i = 0; i < where.childNodes.length; i++) {
+      if (where.childNodes[i].nodeType === 1) {
+        result.push(where.childNodes[i].textContent);
+      }
+    }
+    return result;
+  }
 
 /*
  Задание 5:
@@ -82,7 +102,15 @@ function findError(where) {
    После выполнения функции, дерево <div></div>привет<p></p>loftchool!!!
    должно быть преобразовано в <div></div><p></p>
  */
-function deleteTextNodes(where) {}
+function deleteTextNodes(where) {
+
+  for (let i = 0; i < where.childNodes.length; i++){
+    if(where.childNodes[i].nodeType === 3){
+      where.removeChild(where.childNodes[i])
+    }
+  }
+
+}
 
 /*
  Задание 6:
@@ -95,7 +123,16 @@ function deleteTextNodes(where) {}
    После выполнения функции, дерево <span> <div> <b>привет</b> </div> <p>loftchool</p> !!!</span>
    должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
-function deleteTextNodesRecursive(where) {}
+function deleteTextNodesRecursive(where) {
+  for (let i = 0; i < where.childNodes.length; i++){
+    if(where.childNodes[i].nodeType ===3){
+      where.removeChild(where.childNodes[i])
+      i--;
+    } else if( where.childNodes[i].nodeType === 1) {
+      deleteTextNodesRecursive(where.childNodes[i])
+    }
+  }
+}
 
 /*
  Задание 7 *:
