@@ -35,6 +35,7 @@ import './cookie.html';
    homeworkContainer.appendChild(newDiv);
  */
 const homeworkContainer = document.querySelector('#app');
+console.log(homeworkContainer)
 // текстовое поле для фильтрации cookie
 const filterNameInput = homeworkContainer.querySelector('#filter-name-input');
 // текстовое поле с именем cookie
@@ -46,7 +47,7 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
-const cookiesMap = getCookies();
+const cookies = getCookies();
 let filterValue = '';
 
 updateTable();
@@ -77,7 +78,7 @@ addButton.addEventListener('click', () => {
     }
 
     document.cookie = `${name}=${value}`;
-    cookiesMap.set(name, value);
+    cookies.set(name, value);
 
     updateTable();
 });
@@ -86,7 +87,7 @@ listTable.addEventListener('click', (e) => {
     const { role, cookieName } = e.target.dataset;
 
     if (role === 'remove-cookie') {
-        cookiesMap.delete(cookieName);
+        cookies.delete(cookieName);
         document.cookie = `${cookieName}=deleted; max-age=0`;
         updateTable();
     }
@@ -98,7 +99,7 @@ function updateTable() {
 
     listTable.innerHTML = '';
 
-    for (const [name, value] of cookiesMap) {
+    for (const [name, value] of cookies) {
         if (
             filterValue &&
             !name.toLowerCase().includes(filterValue.toLowerCase()) &&
